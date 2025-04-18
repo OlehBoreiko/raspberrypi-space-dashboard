@@ -1,21 +1,23 @@
-import os
 import requests
-from dotenv import load_dotenv
+import time
+from datetime import datetime, timezone
 
-# Load environment variables
-load_dotenv()
-key = os.getenv("NASA_API_KEY")
+URL = "http://api.open-notify.org/iss-now.json"
 
-# Define endpoint and parameters
-url = "https://api.nasa.gov/planetary/apod"
-params = {"api_key": key}
+def fetch_iss_position():
+    response = requests.get(URL)
+    response.raise_for_status()
+    data = response.json()
+    pos = data["iss_position"]
+    timestamp = data["timestamp"]
+    return {
+        "timestamp": datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat(),
+        "latitude": pos["latitude"],
+        "longitude": pos["longitude"]
+    }
 
-# Send request
-response = requests.get(url, params=params)
-response.raise_for_status()
-data = response.json()
-
-# Output selected data
-print(f"Title: {data['title']}")
-print(f"Date: {data['date']}")
-print(f"Explanation: {data['explanation'][:200]}...")
+if __name__ == "__main__":
+    for _ in range(3):
+        position = fetch_iss_position()
+        print(f"{position['timestamp']} → lat: {position['latitude']} | lon: {position['longitude']}")
+        time.sleep(5)

@@ -1,45 +1,34 @@
-# Grab Your NASA API Key & Make Your First Authenticated Request
+# ISS Tracker (Open API)
 
-This example demonstrates how to:
+This version of the script connects to a free, public API that returns the current position of the International Space Station (ISS) in real time.
 
-- Register and use a NASA API key
-- Store it securely in a `.env` file
-- Use `requests` and `python-dotenv` to load it
-- Make an authenticated GET request to the APOD endpoint
+## 🔗 API Endpoint
 
-## 🔧 Setup Instructions
+- http://api.open-notify.org/iss-now.json  
+  _Note: This is not an official NASA API._
 
-### 1. Copy `.env`:
+## 🧪 What This Version Does
+
+- Sends a GET request to fetch ISS location
+- Extracts `timestamp`, `latitude`, and `longitude`
+- Displays the data in the terminal, every 5 seconds (3 times)
+
+## ▶️ Run the script
+
+> 💡 **Reminder:** Before running the script, make sure your virtual environment is activated.  
+> Otherwise, some packages might not be available.
+
 ```bash
-cp example.env .env
-```
-
-### 2. Paste your API key:
-```bash
-NASA_API_KEY=your_api_key_here
-```
-
-### 3. Create and activate a virtual environment
-```bash
-python3 -m venv venv
 source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate           # Windows
-```
-
-### 4. Install dependencies:
-```bash
-pip install requests python-dotenv
-```
-
-### 5. Run the script:
-```bash
+venv\Scripts\activate         # Windows
 python script.py
 ```
 
+Expected output (example):
 
-You should see today’s Astronomy Picture of the Day info printed in the terminal.
+```
+2024-04-20T12:00:00+00:00 → lat: 48.123 | lon: -123.456
+...
+```
 
----
-
-📌 This example corresponds to the lecture:  
-**“Grab Your NASA API Key & Master Python Requests in Minutes”**  from the course **Raspberry Pi Space Dashboard: NASA APIs, Flask & ChatGPT AI**
+> 💡 Make sure to save the file before running!
