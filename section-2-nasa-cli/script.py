@@ -5,26 +5,24 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("NASA_API_KEY")
 
-url = "https://api.nasa.gov/insight_weather/"
-params = {
-    "api_key": api_key,
-    "feedtype": "json",
-    "ver": "1.0"
-}
+url = "https://api.nasa.gov/planetary/apod"
+params = {"api_key": api_key}
 
 response = requests.get(url, params=params)
 response.raise_for_status()
 data = response.json()
 
-sols = data.get("sol_keys", [])
-if not sols:
-    print("❌ No data available from the InSight API.")
-    exit()
+print(f"📅 Date: {data['date']}")
+print(f"📸 Title: {data['title']}")
+print(f"📝 Explanation: {data['explanation'][:300]}...")
 
-latest_sol = sols[-1]
-mars = data[latest_sol]
-
-print(f"📅 Sol: {latest_sol}")
-print(f"🌡 Avg Temperature: {mars['AT']['av']} °C")
-print(f"🌬 Wind Speed: {mars['HWS']['av']} m/s")
-print(f"📈 Pressure: {mars['PRE']['av']} Pa")
+if data["media_type"] == "image":
+    image_url = data["url"]
+    image_response = requests.get(image_url, stream=True)
+    image_response.raise_for_status()
+    with open("apod.jpg", "wb") as f:
+        for chunk in image_response.iter_content(1024):
+            f.write(chunk)
+    print("✅ Image saved as apod.jpg")
+else:
+    print(f"⚠️ Media is not an image: {data['media_type']}")
