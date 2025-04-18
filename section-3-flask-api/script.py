@@ -3,11 +3,16 @@ import requests
 import os
 from dotenv import load_dotenv
 from datetime import date, timedelta
+import time
 
 load_dotenv()
 api_key = os.getenv("NASA_API_KEY")
 
 app = Flask(__name__)
+
+# Simple in-memory cache
+cache = {}
+CACHE_DURATION = 300  # seconds (5 minutes)
 
 @app.route("/")
 def home():
@@ -45,7 +50,6 @@ def neo():
                 })
     return jsonify({"hazardous_asteroids": neos})
 
-
 @app.route("/mars")
 def mars():
     url = f"https://api.nasa.gov/insight_weather/?api_key={api_key}&feedtype=json&ver=1.0"
@@ -65,6 +69,10 @@ def mars():
 
 @app.route("/donki")
 def donki():
+    now = time.time()
+    if "donki" in cache and now - cache["donki"]["timestamp"] < CACHE_DURATION:
+        return jsonify(cache["donki"]["data"])
+
     today = date.today()
     start = (today - timedelta(days=5)).isoformat()
     end = today.isoformat()
@@ -72,22 +80,30 @@ def donki():
     def fetch(endpoint):
         res = requests.get(f"{base}/{endpoint}?startDate={start}&endDate={end}&api_key={api_key}")
         return res.json()
-    return jsonify({
+    data = {
         "cme": fetch("CME"),
         "flares": fetch("FLR"),
         "storms": fetch("GST")
-    })
+    }
+    cache["donki"] = {"data": data, "timestamp": now}
+    return jsonify(data)
 
 @app.route("/apod")
 def apod():
+    now = time.time()
+    if "apod" in cache and now - cache["apod"]["timestamp"] < CACHE_DURATION:
+        return jsonify(cache["apod"]["data"])
+
     url = f"https://api.nasa.gov/planetary/apod?api_key={api_key}"
     res = requests.get(url)
     data = res.json()
-    return jsonify({
+    output = {
         "title": data["title"],
         "date": data["date"],
         "explanation": data["explanation"][:300]
-    })
+    }
+    cache["apod"] = {"data": output, "timestamp": now}
+    return jsonify(output)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

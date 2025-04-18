@@ -9,7 +9,7 @@ You can use it as a backend for your own dashboard or IoT device.
 
 ```bash
 source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate           # Windows
+venv\Scripts\activate         	# Windows
 ```
 
 2. Install dependencies:
@@ -34,10 +34,27 @@ Visit `http://<raspberry-pi-ip>:5000/` to check the API is running.
 | `/iss`      | Returns current location of the ISS              |
 | `/neo`      | Returns a list of potentially hazardous asteroids (past 5 days) |
 | `/mars`     | Returns latest archived Mars weather from InSight |
-| `/donki`    | Returns recent space weather events (CME, flares, storms) |
-| `/apod`     | Returns Astronomy Picture of the Day title, date, and explanation |
+| `/donki`    | Returns recent space weather events (CME, flares, storms) *(cached)* |
+| `/apod`     | Returns Astronomy Picture of the Day *(cached)* |
 
 All endpoints return JSON data and can be tested via browser, Postman, or curl.
+
+## ⚡ Built-In Caching
+
+The `/apod` and `/donki` routes use in-memory caching (TTL = 5 minutes):
+
+- Speeds up repeat requests
+- Reduces traffic to NASA API
+- Avoids hitting API rate limits
+
+### ⏱ Test with curl:
+
+```bash
+time curl http://localhost:5000/donki
+```
+
+First request: slower, because it calls NASA.  
+Second request: fast, because it uses local cache.
 
 ## 🧱 Project Files
 
