@@ -1,24 +1,21 @@
-# Solar Activity Monitor (NASA DONKI API)
+# Mars Weather Snapshot (NASA InSight API)
 
-This script connects to NASA's DONKI API and retrieves data about recent space weather events:
+This script connects to NASA's archived InSight Mars Weather API and displays historical climate data from the Red Planet.
 
-- ☀️ Coronal Mass Ejections (CME)
-- 🔆 Solar Flares (FLR)
-- 🌍 Geomagnetic Storms (GST)
+## 🔗 API Endpoint
 
-## 🔗 API Endpoints
-
-Base URL: https://api.nasa.gov/DONKI  
-- CME: /CME  
-- FLR: /FLR  
-- GST: /GST
+- https://api.nasa.gov/insight_weather/
+- Note: This API is archived and not updated beyond 2022.
 
 ## 🧪 What This Version Does
 
-- Queries events from the last 5 days
-- Makes 3 separate API requests
-- Displays relevant details for each event
-- Outputs clear messages if no events found
+- Loads your API key from .env
+- Queries the most recent available Martian sol
+- Displays:
+  - Sol number
+  - Average temperature (°C)
+  - Average wind speed (m/s)
+  - Average pressure (Pa)
 
 ## ▶️ Run the script
 
@@ -30,25 +27,13 @@ venv\Scripts\activate           # Windows
 python script.py
 ```
 
-Example output:
+Expected output:
 
 ```
-☀️ CME Events
-
-Date: 2024-04-17
-Catalog: SWRC_CATALOG
-Note: Fast CME detected heading west
-
-🔆 Solar Flares
-
-Date: 2024-04-16
-Class: M1.1
-Active Region: 3632
-
-🌍 Geomagnetic Storms
-
-Date: 2024-04-18
-G-Level: G2
+📅 Sol: 681
+🌡 Avg Temperature: -65.0 °C
+🌬 Wind Speed: 4.8 m/s
+📈 Pressure: 734.1 Pa
 ```
 
-> ✅ If there are no events for a given type, the script will say so.
+> ✅ If the API returns no data, the script will exit cleanly.
