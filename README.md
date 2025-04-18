@@ -47,7 +47,7 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure your API keys:
-Copy **example.env** to **.env** and fill in your NASA and OpenAI API keys.
+Copy `example.env` to `.env` and fill in your NASA and OpenAI API keys.
 ```bash
 NASA_API_KEY=your_nasa_key_here
 OPENAI_API_KEY=your_openai_key_here
