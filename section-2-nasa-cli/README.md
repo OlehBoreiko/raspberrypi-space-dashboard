@@ -1,26 +1,24 @@
-# NEO Asteroids Analysis (NASA API)
+# Solar Activity Monitor (NASA DONKI API)
 
-This script connects to NASA's Near-Earth Object (NEO) API and retrieves data about asteroids that passed near Earth over the last 5 days.
+This script connects to NASA's DONKI API and retrieves data about recent space weather events:
 
-It filters the list to identify those classified as *potentially hazardous* and prints their details in a clean, readable format.
+- ☀️ Coronal Mass Ejections (CME)
+- 🔆 Solar Flares (FLR)
+- 🌍 Geomagnetic Storms (GST)
 
-## 🔗 API Endpoint
+## 🔗 API Endpoints
 
-- https://api.nasa.gov/neo/rest/v1/feed
+Base URL: https://api.nasa.gov/DONKI  
+- CME: /CME  
+- FLR: /FLR  
+- GST: /GST
 
-You will need a free NASA API key to use this script.
-Register at: https://api.nasa.gov/
+## 🧪 What This Version Does
 
-## 🔧 What This Version Does
-
-- Queries asteroid data for the last 5 days
-- Filters potentially hazardous objects
-- Displays:
-  - name
-  - date
-  - estimated max diameter
-  - closest approach distance
-  - relative velocity
+- Queries events from the last 5 days
+- Makes 3 separate API requests
+- Displays relevant details for each event
+- Outputs clear messages if no events found
 
 ## ▶️ Run the script
 
@@ -32,14 +30,25 @@ venv\Scripts\activate           # Windows
 python script.py
 ```
 
-Expected output (example):
+Example output:
 
 ```
-🪨 Name: (2023 QZ1)
-📅 Date: 2024-04-17
-📏 Max Diameter: 0.32 km
-📍 Closest Distance: 1450000 km
-🚀 Velocity: 18.22 km/s
+☀️ CME Events
+
+Date: 2024-04-17
+Catalog: SWRC_CATALOG
+Note: Fast CME detected heading west
+
+🔆 Solar Flares
+
+Date: 2024-04-16
+Class: M1.1
+Active Region: 3632
+
+🌍 Geomagnetic Storms
+
+Date: 2024-04-18
+G-Level: G2
 ```
 
-> ✅ If no hazardous asteroids are found, the script will say so clearly.
+> ✅ If there are no events for a given type, the script will say so.
