@@ -1,34 +1,45 @@
-# ISS Tracker (Open API)
+# NEO Asteroids Analysis (NASA API)
 
-This version of the script connects to a free, public API that returns the current position of the International Space Station (ISS) in real time.
+This script connects to NASA's Near-Earth Object (NEO) API and retrieves data about asteroids that passed near Earth over the last 5 days.
+
+It filters the list to identify those classified as *potentially hazardous* and prints their details in a clean, readable format.
 
 ## 🔗 API Endpoint
 
-- http://api.open-notify.org/iss-now.json  
-  _Note: This is not an official NASA API._
+- https://api.nasa.gov/neo/rest/v1/feed
 
-## 🧪 What This Version Does
+You will need a free NASA API key to use this script.
+Register at: https://api.nasa.gov/
 
-- Sends a GET request to fetch ISS location
-- Extracts `timestamp`, `latitude`, and `longitude`
-- Displays the data in the terminal, every 5 seconds (3 times)
+## 🔧 What This Version Does
+
+- Queries asteroid data for the last 5 days
+- Filters potentially hazardous objects
+- Displays:
+  - name
+  - date
+  - estimated max diameter
+  - closest approach distance
+  - relative velocity
 
 ## ▶️ Run the script
 
-> 💡 **Reminder:** Before running the script, make sure your virtual environment is activated.  
-> Otherwise, some packages might not be available.
+> 💡 **Reminder:** Activate your virtual environment before running:
 
 ```bash
 source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate         # Windows
+venv\Scripts\activate           # Windows
 python script.py
 ```
 
 Expected output (example):
 
 ```
-2024-04-20T12:00:00+00:00 → lat: 48.123 | lon: -123.456
-...
+🪨 Name: (2023 QZ1)
+📅 Date: 2024-04-17
+📏 Max Diameter: 0.32 km
+📍 Closest Distance: 1450000 km
+🚀 Velocity: 18.22 km/s
 ```
 
-> 💡 Make sure to save the file before running!
+> ✅ If no hazardous asteroids are found, the script will say so clearly.
