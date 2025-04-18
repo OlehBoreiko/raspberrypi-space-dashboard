@@ -1,7 +1,7 @@
-# Flask API – Raspberry Pi Space Dashboard
+# Flask API – NASA Space Dashboard
 
-This folder contains the base structure for your Flask API server.  
-Start here before adding any endpoints.
+This Flask app serves live space data from NASA and other public APIs.  
+You can use it as a backend for your own dashboard or IoT device.
 
 ## 🚀 How to Run
 
@@ -18,21 +18,28 @@ venv\Scripts\activate           # Windows
 pip install -r requirements.txt
 ```
 
-3. Run the Flask server:
+3. Run the server:
 
 ```bash
 python script.py
 ```
 
-Visit `http://<raspberry-pi-ip>:5000/` in your browser.
+Visit `http://<raspberry-pi-ip>:5000/` to check the API is running.
 
-You should see:
+## 📡 Available Endpoints
 
-```json
-{ "message": "Space API is running 🚀" }
-```
+| Route       | Description                                      |
+|-------------|--------------------------------------------------|
+| `/`         | Root check – returns a "Space API is running 🚀" message |
+| `/iss`      | Returns current location of the ISS              |
+| `/neo`      | Returns a list of potentially hazardous asteroids (past 5 days) |
+| `/mars`     | Returns latest archived Mars weather from InSight |
+| `/donki`    | Returns recent space weather events (CME, flares, storms) |
+| `/apod`     | Returns Astronomy Picture of the Day title, date, and explanation |
 
-## 🧱 Files
+All endpoints return JSON data and can be tested via browser, Postman, or curl.
 
-- `script.py` — your main Flask app
-- `requirements.txt` — Python packages
+## 🧱 Project Files
+
+- `script.py` – your Flask app
+- `requirements.txt` – required packages
