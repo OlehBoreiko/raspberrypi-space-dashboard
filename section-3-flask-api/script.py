@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Simple in-memory cache
 cache = {}
-CACHE_DURATION = 300  # seconds (5 minutes)
+CACHE_DURATION = 2  # seconds (5 minutes)
 
 @app.route("/")
 def home():
@@ -22,13 +22,14 @@ def home():
 def iss():
     url = "http://api.open-notify.org/iss-now.json"
     res = requests.get(url)
+    res.raise_for_status()
     data = res.json()
     position = data["iss_position"]
     return jsonify({
         "timestamp": data["timestamp"],
         "latitude": position["latitude"],
         "longitude": position["longitude"]
-    })
+        })
 
 @app.route("/neo")
 def neo():
@@ -36,6 +37,7 @@ def neo():
     start = end - timedelta(days=5)
     url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start}&end_date={end}&api_key={api_key}"
     res = requests.get(url)
+    res.raise_for_status()
     data = res.json()
     neos = []
     for day in data["near_earth_objects"]:
@@ -47,13 +49,14 @@ def neo():
                     "diameter_km": neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"],
                     "distance_km": float(neo["close_approach_data"][0]["miss_distance"]["kilometers"]),
                     "velocity_kms": float(neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_second"])
-                })
+                    })
     return jsonify({"hazardous_asteroids": neos})
 
 @app.route("/mars")
 def mars():
     url = f"https://api.nasa.gov/insight_weather/?api_key={api_key}&feedtype=json&ver=1.0"
     res = requests.get(url)
+    res.raise_for_status()
     data = res.json()
     sols = data.get("sol_keys", [])
     if not sols:
@@ -65,7 +68,7 @@ def mars():
         "temperature": weather["AT"]["av"],
         "wind": weather["HWS"]["av"],
         "pressure": weather["PRE"]["av"]
-    })
+        })
 
 @app.route("/donki")
 def donki():
@@ -84,7 +87,7 @@ def donki():
         "cme": fetch("CME"),
         "flares": fetch("FLR"),
         "storms": fetch("GST")
-    }
+        }
     cache["donki"] = {"data": data, "timestamp": now}
     return jsonify(data)
 
@@ -92,18 +95,26 @@ def donki():
 def apod():
     now = time.time()
     if "apod" in cache and now - cache["apod"]["timestamp"] < CACHE_DURATION:
+        app.logger.info("APOD cache HIT")
         return jsonify(cache["apod"]["data"])
 
-    url = f"https://api.nasa.gov/planetary/apod?api_key={api_key}"
-    res = requests.get(url)
-    data = res.json()
-    output = {
-        "title": data["title"],
-        "date": data["date"],
-        "explanation": data["explanation"][:300]
-    }
-    cache["apod"] = {"data": output, "timestamp": now}
-    return jsonify(output)
+    try:
+        url = f"https://api.nasa.gov/planetary/apod?api_key={api_key}"
+        res = requests.get(url)
+        res.raise_for_status()
+        data = res.json()
+        output = {
+            "title": data["title"],
+            "date": data["date"],
+            "explanation": data["explanation"][:300]
+        }
+        cache["apod"] = {"data": output, "timestamp": now}
+        app.logger.info("APOD cache MISS → updated")
+        return jsonify(output)
+
+    except Exception as e:
+        app.logger.error(f"APOD API failed: {e}")
+        return jsonify({"error": "Failed to fetch APOD"}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
