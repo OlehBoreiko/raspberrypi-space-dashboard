@@ -35,3 +35,29 @@ fetch("/mars")
     document.getElementById("mars-pressure").textContent = data.pressure?.toFixed(1) ?? '--';
   })
   .catch(err => console.error("Mars fetch error:", err));
+
+
+// Fetch Astronomy Picture of the Day
+fetch("/apod")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("apod-title").textContent = data.title;
+    document.getElementById("apod-date").textContent = data.date;
+    document.getElementById("apod-img").src = data.url;
+    document.getElementById("apod-modal-title").textContent = data.title;
+    document.getElementById("apod-modal-text").textContent = data.explanation;
+  })
+  .catch(err => console.error("APOD fetch error:", err));
+
+// Modal toggle
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("apod-card").addEventListener("click", () => {
+    document.getElementById("apod-modal").classList.remove("hidden");
+  });
+
+  document.getElementById("apod-close").addEventListener("click", () => {
+    document.getElementById("apod-modal").classList.add("hidden");
+  });
+});

@@ -1,65 +1,73 @@
-# Section 4 – Dynamic Space Weather & Mars Climate Widgets
+# Section 4 – APOD Photo of the Day with Metadata and Modal Popup
 
-In this step, we extended our dashboard with two new data sources:
-
-- 🔆 Space weather (solar flares, CMEs, geomagnetic storms)
-- 🪐 Mars weather (temperature, wind, and pressure)
-
-These are fetched via Flask endpoints and displayed live in the dashboard.
+This step integrates NASA’s Astronomy Picture of the Day (APOD) directly into the bottom of your dashboard with a centered image and metadata.
 
 ---
 
-## 🌞 Space Weather (DONKI API)
+## ✅ Fix in script.py
 
-New HTML:
-```html
-<p>Solar Flares: <span id="solar-flares">--</span></p>
-<p>CMEs: <span id="solar-cmes">--</span></p>
-<p>Storms: <span id="solar-storms">--</span></p>
+Ensure your `/apod` route returns a valid image URL:
+
+```python
+output = {
+    "title": data["title"],
+    "date": data["date"],
+    "explanation": data["explanation"][:300],
+    "url": data["url"]
+}
 ```
 
-Fetch code in `script.js`:
+---
+
+## 🖼️ HTML Section at Bottom of Page
+
+```html
+<div class="bg-gray-800 p-4 rounded cursor-pointer" id="apod-card">
+  <h2 class="text-xl font-semibold" id="apod-title">--</h2>
+  <p id="apod-date">--</p>
+  <div class="flex justify-center mt-2">
+    <img id="apod-img" class="rounded max-h-96" src="" alt="APOD" />
+  </div>
+</div>
+
+<div id="apod-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+  <div class="bg-white text-black p-6 rounded max-w-xl">
+    <button id="apod-close" class="float-right text-gray-500">✖</button>
+    <h2 id="apod-modal-title" class="text-xl font-bold mb-2"></h2>
+    <p id="apod-modal-text"></p>
+  </div>
+</div>
+```
+
+---
+
+## 🚀 JS Fetch + Modal Toggle
+
 ```js
-fetch("/donki")
+fetch("/apod")
   .then(res => res.json())
   .then(data => {
-    document.getElementById("solar-cmes").textContent = data.cme.length;
-    document.getElementById("solar-flares").textContent = data.flares.length;
-    document.getElementById("solar-storms").textContent = data.storms.length;
+    document.getElementById("apod-title").textContent = data.title;
+    document.getElementById("apod-date").textContent = data.date;
+    document.getElementById("apod-img").src = data.url;
+    document.getElementById("apod-modal-title").textContent = data.title;
+    document.getElementById("apod-modal-text").textContent = data.explanation;
   });
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("apod-card").addEventListener("click", () => {
+    document.getElementById("apod-modal").classList.remove("hidden");
+  });
+  document.getElementById("apod-close").addEventListener("click", () => {
+    document.getElementById("apod-modal").classList.add("hidden");
+  });
+});
 ```
 
 ---
 
-## 🪐 Mars Weather (InSight API)
+## 🎯 Final Result
 
-New HTML:
-```html
-<p>Mars Temp: <span id="mars-temp">--</span> °C</p>
-<p>Mars Wind: <span id="mars-wind">--</span> m/s</p>
-<p>Mars Pressure: <span id="mars-pressure">--</span> Pa</p>
-```
-
-Fetch code:
-```js
-fetch("/mars")
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("mars-temp").textContent = data.temperature?.toFixed(1) ?? '--';
-    document.getElementById("mars-wind").textContent = data.wind?.toFixed(1) ?? '--';
-    document.getElementById("mars-pressure").textContent = data.pressure?.toFixed(1) ?? '--';
-  });
-```
-
----
-
-## 🧪 Final Result
-
-Now the dashboard includes:
-
-- ✅ ISS Position
-- ✅ Asteroids Near Earth
-- ✅ Solar Activity
-- ✅ Mars Weather
-
-Everything is dynamic and updates automatically on load.
+- APOD image appears at the bottom of the dashboard
+- Title and date are visible at a glance
+- Full description opens in a clean modal popup
