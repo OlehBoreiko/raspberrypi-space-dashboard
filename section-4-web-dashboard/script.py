@@ -106,7 +106,8 @@ def apod():
         output = {
             "title": data["title"],
             "date": data["date"],
-            "explanation": data["explanation"][:300]
+            "explanation": data["explanation"][:300],
+            "url": data["url"]
         }
         cache["apod"] = {"data": output, "timestamp": now}
         app.logger.info("APOD cache MISS → updated")
