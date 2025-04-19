@@ -9,7 +9,7 @@ You can use it as a backend for your own dashboard or IoT device.
 
 ```bash
 source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate         	# Windows
+venv\Scripts\activate         # Windows
 ```
 
 2. Install dependencies:
@@ -51,18 +51,18 @@ The `/apod` and `/donki` routes use in-memory caching (TTL = 5 minutes) to impro
 ### 1. Curl (manual test)
 
 ```bash
-curl http://raspberrypi-ip:5000/apod
+curl http://raspberry-pi-ip:5000/apod
 ```
 
 or measure speed:
 
 ```bash
-time curl http://raspberrypi-ip:5000/apod
+time curl http://raspberry-pi-ip:5000/apod
 ```
 
 ### 2. Postman (GUI test)
 
-- Open Postman and make a GET request to `http://raspberrypi-ip:5000/neo`
+- Open Postman and make a GET request to `http://raspberry-pi-ip:5000/neo`
 - See the JSON response, headers, status code
 
 ### 3. Pytest (automated test)
@@ -89,3 +89,38 @@ Tests are defined in `test_app.py`. They verify:
 - `script.py` – your Flask app
 - `test_app.py` – test script using Pytest
 - `requirements.txt` – required packages
+
+## 🚀 Deployment Tips
+
+You can move this project to another Raspberry Pi or server easily.
+
+### On the new device:
+
+1. Clone or copy the folder
+2. Create a new virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Add your `.env` file with a valid NASA_API_KEY
+5. Start the app:
+
+```bash
+python script.py
+```
+
+✅ Flask will show a message:
+```
+WARNING: This is a development server. Do not use it in a production deployment.
+```
+That’s okay! For Raspberry Pi and testing, this is fine.
+
+In Section 7, we’ll show you how to launch it on boot using `systemd` for 24/7 operation.
