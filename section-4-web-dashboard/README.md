@@ -1,65 +1,60 @@
-# Section 4 – Flask-Powered Web Dashboard
+# Section 4 – Web Dashboard with ISS and Asteroid Data
 
-This folder contains a self-contained version of your Raspberry Pi Space Dashboard, with both the frontend (HTML/CSS/JS) and backend (Flask API) in one place.
+This folder contains the self-contained Flask project with the frontend dashboard and API server.
 
-## 📁 Folder Structure
+## 🚀 What Was Added in This Step
 
-```
-section-4-web-dashboard/
-├── script.py               ← Flask server and API routes
-├── templates/
-│   └── index.html          ← Dashboard HTML layout served by Flask
-├── static/
-│   ├── style.css           ← Tailwind styles (customizable)
-│   └── script.js           ← JavaScript logic (fetch calls will be added in later lectures)
-```
+In this lecture, we added JavaScript fetch calls to display real-time space data.
 
-## ⚙️ How It Works
+### ✅ Live ISS Position
 
-We created a copy of `script.py` directly in this folder. This way, you don’t need to run Flask from another location or reference template/static folders manually.
+Updates these fields:
 
-This file already includes:
-
-```python
-from flask import Flask, render_template
-
-app = Flask(__name__)
-
-@app.route("/")
-def index():
-    return render_template("index.html")
+```html
+<p>Latitude: <span id="iss-lat">--</span></p>
+<p>Longitude: <span id="iss-lon">--</span></p>
 ```
 
-This allows Flask to serve the HTML UI from the `templates/` folder and static assets from `static/`.
+In `static/script.js`:
 
-## 🔧 Setup Instructions
-
-1. Activate your virtual environment (if not active):
-
-```bash
-source venv/bin/activate
+```js
+fetch("/iss")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("iss-lat").textContent = data.latitude;
+    document.getElementById("iss-lon").textContent = data.longitude;
+  });
 ```
 
-2. From inside `section-4-web-dashboard/`, run the Flask server:
+### ✅ Asteroid Count
+
+Updates:
+
+```html
+<p>Total hazardous: <span id="asteroid-count">--</span></p>
+```
+
+In `script.js`:
+
+```js
+fetch("/neo")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("asteroid-count").textContent = data.hazardous_asteroids.length;
+  });
+```
+
+These values now update live whenever the page loads.
+
+## 💡 Tip
+
+Make sure Flask is running before opening the dashboard:
 
 ```bash
 python script.py
 ```
 
-3. In your browser, visit:
-
+Visit:
 ```
 http://<your-raspberry-pi-ip>:5000
 ```
-
-You should see the styled dashboard UI.
-
-## 📌 JavaScript Integration
-
-In `script.js`, you don’t need to hardcode IPs. Use relative paths like:
-
-```javascript
-fetch("/iss")
-```
-
-We’ll begin writing real fetch logic in next lectures.
