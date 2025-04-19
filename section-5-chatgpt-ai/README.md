@@ -12,6 +12,9 @@ Summarizes potentially hazardous asteroids using data from `/neo`.
 ### ✅ explain_donki.py
 Summarizes solar activity (CMEs, flares, storms) using data from `/donki`.
 
+### ✅ explain_mars.py
+Summarizes current weather conditions on Mars using data from `/mars`.
+
 ---
 
 ## 🔧 Setup Instructions
@@ -45,4 +48,10 @@ python explain_neo.py
 python explain_donki.py
 ```
 
+### Mars Weather Report
+```bash
+python explain_mars.py
+```
+
 Each script will output a ChatGPT-generated summary based on real-time data from your Flask API.
+
