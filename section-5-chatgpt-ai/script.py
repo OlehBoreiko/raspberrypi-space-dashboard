@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 # Simple in-memory cache
 cache = {}
-CACHE_DURATION = 2  # seconds (5 minutes)
+CACHE_DURATION = 300  # seconds (5 minutes)
 
 @app.route("/")
 def index():
