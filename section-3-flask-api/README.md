@@ -37,53 +37,55 @@ Visit `http://<raspberry-pi-ip>:5000/` to check the API is running.
 | `/donki`    | Returns recent space weather events (CME, flares, storms) *(cached)* |
 | `/apod`     | Returns Astronomy Picture of the Day *(cached, error-handled)* |
 
-All endpoints return JSON data and can be tested via browser, Postman, or curl.
-
 ## ⚡ Built-In Caching
 
-The `/apod` and `/donki` routes use in-memory caching (TTL = 5 minutes):
-
-- Speeds up repeat requests
-- Reduces traffic to NASA API
-- Avoids hitting API rate limits
-
-### ⏱ Test with curl:
-
-```bash
-time curl http://localhost:5000/apod
-```
-
-First request: slower (fetches from NASA)  
-Second request: instant (served from cache)
+The `/apod` and `/donki` routes use in-memory caching (TTL = 5 minutes) to improve speed and reduce API usage.
 
 ## 🛠 Logging & Error Handling
 
-- Every route using external APIs is wrapped in `try-except` blocks.
-- If NASA is unavailable or the key is wrong, you’ll get:
+- Logs cache usage and API call success/failure
+- Handles API errors with `try-except` and returns JSON errors instead of crashing
 
-```json
-{ "error": "Failed to fetch APOD" }
-```
+## ✅ Testing the API
 
-- Flask logs the exact error to terminal:
-```
-APOD API failed: 403 Client Error: Forbidden
-```
-
-### 🧪 Simulate a failure:
-
-1. Open your `.env` file and change `NASA_API_KEY=BADKEY123`
-2. Restart the Flask server
-3. Wait a few seconds (or change `CACHE_DURATION` to a low number)
-4. Run:
+### 1. Curl (manual test)
 
 ```bash
-curl http://localhost:5000/apod
+curl http://raspberrypi-ip:5000/apod
 ```
 
-✅ You’ll get an error message in JSON and a clear log in terminal — no crash.
+or measure speed:
+
+```bash
+time curl http://raspberrypi-ip:5000/apod
+```
+
+### 2. Postman (GUI test)
+
+- Open Postman and make a GET request to `http://raspberrypi-ip:5000/neo`
+- See the JSON response, headers, status code
+
+### 3. Pytest (automated test)
+
+Install pytest if needed:
+
+```bash
+pip install pytest
+```
+
+Run the test suite:
+
+```bash
+pytest
+```
+
+Tests are defined in `test_app.py`. They verify:
+- Status code is 200
+- Response is JSON
+- Homepage contains “Space API”
 
 ## 🧱 Project Files
 
 - `script.py` – your Flask app
+- `test_app.py` – test script using Pytest
 - `requirements.txt` – required packages
