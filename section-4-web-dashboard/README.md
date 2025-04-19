@@ -1,60 +1,65 @@
-# Section 4 – Web Dashboard with ISS and Asteroid Data
+# Section 4 – Dynamic Space Weather & Mars Climate Widgets
 
-This folder contains the self-contained Flask project with the frontend dashboard and API server.
+In this step, we extended our dashboard with two new data sources:
 
-## 🚀 What Was Added in This Step
+- 🔆 Space weather (solar flares, CMEs, geomagnetic storms)
+- 🪐 Mars weather (temperature, wind, and pressure)
 
-In this lecture, we added JavaScript fetch calls to display real-time space data.
+These are fetched via Flask endpoints and displayed live in the dashboard.
 
-### ✅ Live ISS Position
+---
 
-Updates these fields:
+## 🌞 Space Weather (DONKI API)
 
+New HTML:
 ```html
-<p>Latitude: <span id="iss-lat">--</span></p>
-<p>Longitude: <span id="iss-lon">--</span></p>
+<p>Solar Flares: <span id="solar-flares">--</span></p>
+<p>CMEs: <span id="solar-cmes">--</span></p>
+<p>Storms: <span id="solar-storms">--</span></p>
 ```
 
-In `static/script.js`:
-
+Fetch code in `script.js`:
 ```js
-fetch("/iss")
+fetch("/donki")
   .then(res => res.json())
   .then(data => {
-    document.getElementById("iss-lat").textContent = data.latitude;
-    document.getElementById("iss-lon").textContent = data.longitude;
+    document.getElementById("solar-cmes").textContent = data.cme.length;
+    document.getElementById("solar-flares").textContent = data.flares.length;
+    document.getElementById("solar-storms").textContent = data.storms.length;
   });
 ```
 
-### ✅ Asteroid Count
+---
 
-Updates:
+## 🪐 Mars Weather (InSight API)
 
+New HTML:
 ```html
-<p>Total hazardous: <span id="asteroid-count">--</span></p>
+<p>Mars Temp: <span id="mars-temp">--</span> °C</p>
+<p>Mars Wind: <span id="mars-wind">--</span> m/s</p>
+<p>Mars Pressure: <span id="mars-pressure">--</span> Pa</p>
 ```
 
-In `script.js`:
-
+Fetch code:
 ```js
-fetch("/neo")
+fetch("/mars")
   .then(res => res.json())
   .then(data => {
-    document.getElementById("asteroid-count").textContent = data.hazardous_asteroids.length;
+    document.getElementById("mars-temp").textContent = data.temperature?.toFixed(1) ?? '--';
+    document.getElementById("mars-wind").textContent = data.wind?.toFixed(1) ?? '--';
+    document.getElementById("mars-pressure").textContent = data.pressure?.toFixed(1) ?? '--';
   });
 ```
 
-These values now update live whenever the page loads.
+---
 
-## 💡 Tip
+## 🧪 Final Result
 
-Make sure Flask is running before opening the dashboard:
+Now the dashboard includes:
 
-```bash
-python script.py
-```
+- ✅ ISS Position
+- ✅ Asteroids Near Earth
+- ✅ Solar Activity
+- ✅ Mars Weather
 
-Visit:
-```
-http://<your-raspberry-pi-ip>:5000
-```
+Everything is dynamic and updates automatically on load.

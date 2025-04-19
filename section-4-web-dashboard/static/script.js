@@ -14,3 +14,24 @@ fetch("/neo")
     document.getElementById("asteroid-count").textContent = data.hazardous_asteroids.length;
   })
   .catch(err => console.error("NEO fetch error:", err));
+
+
+// Fetch solar activity data
+fetch("/donki")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("solar-cmes").textContent = data.cme.length;
+    document.getElementById("solar-flares").textContent = data.flares.length;
+    document.getElementById("solar-storms").textContent = data.storms.length;
+  })
+  .catch(err => console.error("DONKI fetch error:", err));
+
+// Fetch Mars weather data
+fetch("/mars")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("mars-temp").textContent = data.temperature?.toFixed(1) ?? '--';
+    document.getElementById("mars-wind").textContent = data.wind?.toFixed(1) ?? '--';
+    document.getElementById("mars-pressure").textContent = data.pressure?.toFixed(1) ?? '--';
+  })
+  .catch(err => console.error("Mars fetch error:", err));
