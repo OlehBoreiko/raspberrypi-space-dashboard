@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body class="bg-black text-white font-sans">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4">🌌 Space Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-gray-800 p-4 rounded">
+        <h2 class="text-xl font-semibold">ISS Position</h2>
+        <p>Latitude: <span id="iss-lat">--</span></p>
+        <p>Longitude: <span id="iss-lon">--</span></p>
+      </div>
+
+      <div class="bg-gray-800 p-4 rounded">
+        <h2 class="text-xl font-semibold">Asteroids Near Earth</h2>
+        <p>Total hazardous: <span id="asteroid-count">--</span></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
