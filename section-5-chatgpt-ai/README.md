@@ -1,43 +1,48 @@
-# ChatGPT Asteroid Risk Summary
+# ChatGPT AI Tools (Section 5)
 
-This script fetches data from your local `/neo` Flask API route and sends it to OpenAI's ChatGPT to generate a natural-language summary.
+This folder contains ready-made scripts for generating summaries using OpenAI’s GPT models based on your Flask API data.
 
-## 🔧 Setup
+---
 
-1. Activate your virtual environment:
+## 📁 Scripts
+
+### ✅ explain_neo.py
+Summarizes potentially hazardous asteroids using data from `/neo`.
+
+### ✅ explain_donki.py
+Summarizes solar activity (CMEs, flares, storms) using data from `/donki`.
+
+---
+
+## 🔧 Setup Instructions
+
+1. Activate your Python virtual environment:
 ```bash
 source venv/bin/activate
 ```
 
-2. Install the required libraries:
+2. Install required packages:
 ```bash
 pip install openai python-dotenv requests
 ```
 
-3. Create a `.env` file based on the example:
+3. Create a `.env` file using the example provided:
 ```env
 OPENAI_API_KEY=your_api_key_here
 ```
 
-## 📄 What the Script Does
+---
 
-1. Sends a GET request to `http://localhost:5000/neo`
-2. Collects a list of hazardous asteroids
-3. Formats the list into lines like:
-```
-2025-04-20 – (2024 AB12) (0.24 km, 21.9 km/s)
-```
-4. Sends that formatted list to ChatGPT with the prompt:
-> "You are a space analyst. Summarize asteroid risk."
+## 🚀 Run Scripts
 
-5. Prints the response in the terminal.
-
-## 🚀 Run the Script
-
+### Asteroid Summary
 ```bash
 python explain_neo.py
 ```
 
-You’ll get a result like:
-> “5 hazardous asteroids will pass near Earth this week. The largest is 270 meters wide...”
+### Solar Activity Summary
+```bash
+python explain_donki.py
+```
 
+Each script will output a ChatGPT-generated summary based on real-time data from your Flask API.
