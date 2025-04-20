@@ -1,48 +1,61 @@
-# GPS Module Reader
+# Track the ISS with Python: Predict Flyovers Using GPS & Skyfield
 
-This script reads NMEA data from a GPS module connected to your Raspberry Pi (via USB or GPIO) and extracts live latitude and longitude once a satellite fix is obtained.
+This project uses your GPS module and the Skyfield astronomy library to compute when the International Space Station (ISS) will pass over your location.
 
-## 📂 Files
+## 📦 Features
 
-- **gps_reader.py** — The Python script to read and parse NMEA `$GPGGA` sentences.
+- 📍 Reads real-time GPS coordinates from `/dev/ttyACM0`
+- 🛰 Downloads and caches ISS TLE data from Celestrak
+- 🌍 Calculates upcoming ISS flyovers (rise, peak, set) for the next 2 days
+- 🕒 Converts UTC time to local timezone (Kyiv by default)
 
-## 🔧 Setup
+---
 
-1. **Activate your virtual environment**:  
+## 🚀 How to Run
+
+1. **Activate virtual environment**:
    ```bash
    source venv/bin/activate
    ```
 
-2. **Install dependencies**:  
+2. **Install dependencies**:
    ```bash
-   pip install pyserial
+   pip install skyfield numpy requests
    ```
 
-3. **Choose your connection type**:  
-   - **USB GPS dongle** (e.g., NEO-6M Mini SMA): device path likely `/dev/ttyUSB0` or `/dev/ttyACM0`.  
-   - **GPIO wiring** with a NEO-6M breakout: use `/dev/serial0` (enable hardware serial in `raspi-config`).
-
-4. **Update the port in `gps_reader.py`**:  
-   Edit the `PORT` variable at the top of the script to match your detected device:
-   ```python
-   PORT = '/dev/ttyACM0'  # or '/dev/ttyUSB0' or '/dev/serial0'
+3. **Run the script**:
+   ```bash
+   python iss_flyover.py
    ```
 
-## 🚀 Run the Script
+---
 
-```bash
-python gps_reader.py
+## 🔧 Timezone Customization
+
+Edit this line in the script to change the output timezone:
+```python
+kyiv = ZoneInfo("Europe/Kyiv")
 ```
 
-- You will see lines like:
-  - `🕐 Waiting for GPS fix...` until satellites are locked.
-  - `✅ GPS fix acquired: Latitude = xx.xxxxxx, Longitude = yy.yyyyyy` when a fix is obtained.
+Replace `"Europe/Kyiv"` with your own zone from the [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
-## ⚙️ How It Works
+---
 
-1. Opens the serial port at the specified `PORT` and `baudrate=9600`.
-2. Reads NMEA sentences continuously.
-3. Filters `$GPGGA` lines, parses the fields to determine fix quality and coordinates.
-4. Converts latitude/longitude from degrees+minutes format to decimal degrees.
-5. Prints diagnostic messages and coordinates.
+## 📌 Output Example
 
+```
+📍 Location acquired: Latitude = 49.835325, Longitude = 23.879227
+
+📆 Upcoming ISS Flyovers:
+2025-04-21 06:19:22 (Kyiv time) — ⬆️ Rise above 10°
+2025-04-21 06:22:34 (Kyiv time) — 🌟 Culminate
+2025-04-21 06:25:47 (Kyiv time) — ⬇️ Set below 10°
+...
+```
+
+Each pass includes 3 events:
+- ⬆️ Rise — when ISS first becomes visible
+- 🌟 Culminate — highest point in the sky
+- ⬇️ Set — when ISS disappears under the horizon
+
+---
