@@ -1,61 +1,68 @@
-# Track the ISS with Python: Predict Flyovers Using GPS & Skyfield
+# 🛰️ Display ISS Flyover Times in Your Space Dashboard
 
-This project uses your GPS module and the Skyfield astronomy library to compute when the International Space Station (ISS) will pass over your location.
-
-## 📦 Features
-
-- 📍 Reads real-time GPS coordinates from `/dev/ttyACM0`
-- 🛰 Downloads and caches ISS TLE data from Celestrak
-- 🌍 Calculates upcoming ISS flyovers (rise, peak, set) for the next 2 days
-- 🕒 Converts UTC time to local timezone (Kyiv by default)
+In this lecture, we implemented a unified ISS Tracker block that shows both the real-time position of the International Space Station and upcoming flyover times for the user's location.
 
 ---
 
-## 🚀 How to Run
+## ✅ Features Implemented
 
-1. **Activate virtual environment**:
-   ```bash
-   source venv/bin/activate
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   pip install skyfield numpy requests
-   ```
-
-3. **Run the script**:
-   ```bash
-   python iss_flyover.py
-   ```
+- `/iss` route – gets real-time ISS position from Open Notify API
+- `/iss-flyover` route – computes the next visible pass of the ISS over your location using Skyfield + TLE data
+- `/ai/iss-tracker` – AI explanation based on live flyover data (ChatGPT API)
+- `get_gps_coordinates()` – with fallback to hardcoded coordinates if GPS module is missing
+- Unified `🛰️ ISS Tracker` block in `index.html`
+- Tailwind CSS layout with icons: 📍 Current Position and 📆 Next Flyover
+- Button to refresh data manually
+- 🧠 Explain with AI button for educational support
 
 ---
 
-## 🔧 Timezone Customization
+## 🧭 Files in this folder
 
-Edit this line in the script to change the output timezone:
-```python
-kyiv = ZoneInfo("Europe/Kyiv")
+- `script.py` – Flask backend for all routes and AI
+- `index.html` – Dashboard UI with ISS Tracker block
+- `script.js` – Handles dynamic updates for ISS position + flyover data
+
+---
+
+## 🔧 How to Run
+
+```bash
+cd section-6-bonus-gps-telegram
+source venv/bin/activate
+python script.py
 ```
 
-Replace `"Europe/Kyiv"` with your own zone from the [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+Open `http://<your-pi-ip>:5000` in your browser.
 
 ---
 
-## 📌 Output Example
+## 🧠 Note for Students Without GPS Module
 
-```
-📍 Location acquired: Latitude = 49.835325, Longitude = 23.879227
-
-📆 Upcoming ISS Flyovers:
-2025-04-21 06:19:22 (Kyiv time) — ⬆️ Rise above 10°
-2025-04-21 06:22:34 (Kyiv time) — 🌟 Culminate
-2025-04-21 06:25:47 (Kyiv time) — ⬇️ Set below 10°
-...
-```
-
-Each pass includes 3 events:
-- ⬆️ Rise — when ISS first becomes visible
-- 🌟 Culminate — highest point in the sky
-- ⬇️ Set — when ISS disappears under the horizon
+In `script.py`, if you don’t have a GPS module, the app will automatically use fallback coordinates (Kyiv by default). You can edit these in the `get_gps_coordinates()` function.
 
 ---
+
+## 💡 Sample Flyover Output
+
+```json
+{
+  "rise": "2025-04-21 06:19:22",
+  "peak": "2025-04-21 06:22:34",
+  "set": "2025-04-21 06:25:47",
+  "duration_seconds": 385
+}
+```
+
+---
+
+## 🧠 AI Example Prompt
+
+The AI uses real-time flyover data to explain:
+> "The ISS will rise at 06:19:22, reach its highest point at 06:22:34, and set at 06:25:47. Here's what that means..."
+
+---
+
+## 🚀 Summary
+
+With this lecture, the dashboard becomes a smart observation assistant for space enthusiasts.
