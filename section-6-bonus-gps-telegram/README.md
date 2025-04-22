@@ -1,69 +1,46 @@
-# 📬 Build a Telegram Bot for Instant Space Notifications
+# 🛰️ Live ISS Trajectory on Leaflet Maps with Smooth Animation
 
-In this lecture, you’ll create a simple but powerful Telegram bot that sends space-related alerts directly to your phone.
-
----
-
-## ✅ What’s Included
-
-- `send_message.py`: Fetches ISS flyover data from your local Flask server and sends it to Telegram
-- `.env`: Stores your Telegram bot token and chat ID
-- Uses `/iss-flyover` route from previous lectures
+This lecture enhances your Space Dashboard with a real-time animated map showing the current trajectory of the International Space Station (ISS). The data is fetched from your local `/iss` API and visualized using Leaflet.js in a modal popup.
 
 ---
 
-## 📲 Telegram Bot Setup
+## ✅ Features Implemented
 
-1. Open Telegram, search for `@BotFather`
-2. Send `/newbot` and follow instructions
-3. Save the **API token**
-4. Start a chat with your bot
-5. Visit:
-   ```
-   https://api.telegram.org/bot<YOUR-TOKEN>/getUpdates
-   ```
-   Copy the `chat.id` value from the JSON response
+- Live Leaflet map rendered in a modal (`#map-modal`)
+- Custom SVG ISS marker that moves every 5 seconds
+- Animated trajectory trail using `L.polyline`
+- Smooth map movement with `map.panTo(...)`
+- Close button styled to stay visible above the map
+- ISS Trajectory button in ISS Tracker block
 
 ---
 
-## 📁 .env File Format
+## 🛠 Files Updated
 
-```
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
-```
+- `index.html`
+  - Added Leaflet CDN
+  - Injected modal HTML for `#map-modal`
+  - Added button: 🔭 View ISS Trajectory
+- `script.js`
+  - `openTrajectoryMap()`, `initMap()`, `updateMapISS()`
+  - Map logic initializes only once
 
 ---
 
 ## 🚀 How to Use
 
-```bash
-cd section-6-bonus-gps-telegram
-source venv/bin/activate
-python send_message.py
-```
-
-You should receive a message like:
-
-```
-🛰️ ISS Flyover Alert
-📆 Rise: 21:12
-🌟 Peak: 21:15
-📉 Set: 21:18
-⏱️ Duration: 360 seconds
-```
+1. Launch your Flask server with `/iss` endpoint
+2. Visit your dashboard in the browser
+3. Click 🔭 View ISS Trajectory
 
 ---
 
-## 💡 Ideas for Expansion
+## 💡 Bonus Ideas
 
-- Send APOD image links daily
-- Alert when hazardous asteroids appear
-- Trigger via `cron` or `systemd`
-- Add user commands like `/neo`, `/iss`, or `/mars`
+- Add orbital predictions with TLE data
+- Switch between light/dark map themes
+- Show ISS altitude and speed
 
 ---
 
-## 🧠 Summary
-
-With this tool, your dashboard becomes interactive. Telegram becomes your real-time cosmic assistant.
+Enjoy your upgraded, real-time space dashboard!

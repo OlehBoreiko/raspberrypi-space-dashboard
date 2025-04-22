@@ -125,3 +125,58 @@ async function explain(type) {
       });
     }
   });
+  
+  // 🌍 ISS Trajectory Map
+  let mapInitialized = false;
+  let map, marker, polyline, trajectory = [];
+  
+  function openTrajectoryMap() {
+    document.getElementById("map-modal").classList.remove("hidden");
+    if (!mapInitialized) {
+      setTimeout(initMap, 100); // delay for modal render
+    }
+  }
+  
+  function closeTrajectoryMap() {
+    document.getElementById("map-modal").classList.add("hidden");
+  }
+  
+  function initMap() {
+    map = L.map('map').setView([0, 0], 2);
+  
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 5,
+      minZoom: 2,
+      attribution: ''
+    }).addTo(map);
+  
+    const issIcon = L.icon({
+      iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d0/International_Space_Station.svg',
+      iconSize: [50, 32],
+      iconAnchor: [25, 16]
+    });
+  
+    marker = L.marker([0, 0], { icon: issIcon }).addTo(map);
+    polyline = L.polyline([], { color: 'orange', weight: 2 }).addTo(map);
+  
+    mapInitialized = true;
+    updateMapISS();
+    setInterval(updateMapISS, 5000);
+  }
+  
+  async function updateMapISS() {
+    try {
+      const res = await fetch("/iss");
+      const data = await res.json();
+      const lat = parseFloat(data.latitude);
+      const lon = parseFloat(data.longitude);
+  
+      if (marker) marker.setLatLng([lat, lon]);
+      trajectory.push([lat, lon]);
+      if (polyline) polyline.setLatLngs(trajectory);
+      if (map) map.panTo([lat, lon], { animate: true, duration: 1 });
+  
+    } catch (err) {
+      console.error("Map ISS update failed:", err);
+    }
+  }
