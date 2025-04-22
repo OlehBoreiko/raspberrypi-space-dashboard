@@ -180,3 +180,22 @@ async function explain(type) {
       console.error("Map ISS update failed:", err);
     }
   }
+  
+  // 🔽 Collapsible Sections Logic
+  document.addEventListener("DOMContentLoaded", () => {
+    const headers = document.querySelectorAll(".collapsible-header");
+    headers.forEach(header => {
+      header.addEventListener("click", () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector(".toggle-icon");
+  
+        if (content && content.classList.contains("section-content")) {
+          content.classList.toggle("collapsed");
+          if (icon) {
+            icon.textContent = content.classList.contains("collapsed") ? " 🔼" : " 🔽";
+          }
+        }
+      });
+    });
+  });
+  

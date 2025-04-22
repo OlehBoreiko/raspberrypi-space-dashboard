@@ -1,46 +1,25 @@
-# 🛰️ Live ISS Trajectory on Leaflet Maps with Smooth Animation
+# Parallax Starfield & Collapsible Sections
 
-This lecture enhances your Space Dashboard with a real-time animated map showing the current trajectory of the International Space Station (ISS). The data is fetched from your local `/iss` API and visualized using Leaflet.js in a modal popup.
+In this lecture, we upgraded the visual experience of the Space Dashboard by adding two key front-end enhancements:
 
----
+## 🌌 Starfield Background (Parallax)
 
-## ✅ Features Implemented
+- Added a full-screen animated SVG background using randomly placed stars.
+- The background is animated using `@keyframes` in CSS (`panStars`) to simulate motion and depth.
+- The CSS is embedded in `style.css` and applied using `body::before`.
 
-- Live Leaflet map rendered in a modal (`#map-modal`)
-- Custom SVG ISS marker that moves every 5 seconds
-- Animated trajectory trail using `L.polyline`
-- Smooth map movement with `map.panTo(...)`
-- Close button styled to stay visible above the map
-- ISS Trajectory button in ISS Tracker block
+## 🔽 Collapsible Sections
 
----
+- Each section header (`h2`) is now clickable and includes a toggle icon (🔽 / 🔼).
+- The content below each header is wrapped in a `<div class="section-content">`.
+- JavaScript toggles the `.collapsed` class with smooth transitions defined in `style.css`.
 
-## 🛠 Files Updated
+### Updated Files
 
-- `index.html`
-  - Added Leaflet CDN
-  - Injected modal HTML for `#map-modal`
-  - Added button: 🔭 View ISS Trajectory
-- `script.js`
-  - `openTrajectoryMap()`, `initMap()`, `updateMapISS()`
-  - Map logic initializes only once
+- `index.html` – Added toggle icons and wrapped content in `.section-content` divs.
+- `script.js` – Added click listeners to toggle section visibility and arrow direction.
+- `style.css` – Added collapsible logic using `max-height` and transitions. Also includes starfield background animation.
 
 ---
 
-## 🚀 How to Use
-
-1. Launch your Flask server with `/iss` endpoint
-2. Visit your dashboard in the browser
-3. Click 🔭 View ISS Trajectory
-
----
-
-## 💡 Bonus Ideas
-
-- Add orbital predictions with TLE data
-- Switch between light/dark map themes
-- Show ISS altitude and speed
-
----
-
-Enjoy your upgraded, real-time space dashboard!
+This improves both the usability and visual experience, especially on mobile devices. All blocks (ISS, Asteroids, Solar Activity, Mars Weather) now support collapsible UI.

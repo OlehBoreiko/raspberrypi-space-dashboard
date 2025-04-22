@@ -13,7 +13,8 @@
 <h1 class="text-3xl font-bold mb-4">🌌 Space Dashboard</h1>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-gray-800 p-4 rounded">
-        <h2 class="text-xl font-semibold">🛰️ ISS Tracker</h2>
+        <h2 class="text-xl font-semibold collapsible-header cursor-pointer">🛰️ ISS Tracker<span class="toggle-icon"> 🔽</span></h2>
+        <div class="section-content">
         <div class="grid grid-cols-2 gap-4 mt-2">
         <div>
         <h3 class="font-semibold text-sm mb-1">📍 Current Position</h3>
@@ -35,27 +36,34 @@
         </div>
         <div class="markdown-output mt-2" id="iss-tracker-explanation"></div>
         </div>
+        </div>
 <div class="bg-gray-800 p-4 rounded">
-<h2 class="text-xl font-semibold">☄️ Asteroids Near Earth</h2>
+<h2 class="text-xl font-semibold collapsible-header cursor-pointer">☄️ Asteroids Near Earth<span class="toggle-icon"> 🔽</span></h2>
+<div class="section-content">
 <p>Total hazardous: <span id="asteroid-count">--</span></p>
 <button onclick="explain('neo')">🧠 Explain with AI</button>
 <div class="markdown-output mt-2" id="neo-explanation"></div>
 </div>
+</div>
 <div class="bg-gray-800 p-4 rounded">
-<h2 class="text-xl font-semibold">🌞 Solar Activity</h2>
+<h2 class="text-xl font-semibold collapsible-header cursor-pointer">🌞 Solar Activity<span class="toggle-icon"> 🔽</span></h2>
+<div class="section-content">
 <p>Solar Flares: <span id="solar-flares">--</span></p>
 <p>CMEs: <span id="solar-cmes">--</span></p>
 <p>Storms: <span id="solar-storms">--</span></p>
 <button onclick="explain('donki')">🧠 Explain with AI</button>
 <div class="markdown-output mt-2" id="donki-explanation"></div>
 </div>
+</div>
 <div class="bg-gray-800 p-4 rounded">
-<h2 class="text-xl font-semibold">🔴 Mars Weather</h2>
+<h2 class="text-xl font-semibold collapsible-header cursor-pointer">🔴 Mars Weather<span class="toggle-icon"> 🔽</span></h2>
+<div class="section-content">
 <p>Mars Temp: <span id="mars-temp">--</span> °C</p>
 <p>Mars Wind: <span id="mars-wind">--</span> m/s</p>
 <p>Mars Pressure: <span id="mars-pressure">--</span> Pa</p>
 <button onclick="explain('mars')">🧠 Explain with AI</button>
 <div class="markdown-output mt-2" id="mars-explanation"></div>
+</div>
 </div>
 </div>
 </div>
