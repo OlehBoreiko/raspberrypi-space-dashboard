@@ -1,0 +1,12 @@
+[Unit]
+Description=My Python Project
+After=network.target
+
+[Service]
+ExecStart=/home/pi/project/venv/bin/python /home/pi/project/script.py
+WorkingDirectory=/home/pi/project
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
